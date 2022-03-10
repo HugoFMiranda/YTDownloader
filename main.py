@@ -103,4 +103,6 @@ if sn.__eq__("s"):
         download(video_resolutions, videos)
     else:
         pass
+
+
 input(colored('\n\nObrigado por usar FalconYTDownloader3000, pressione qualquer tecla para sair.', "magenta"))
