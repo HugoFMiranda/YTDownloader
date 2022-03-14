@@ -105,4 +105,4 @@ if sn.__eq__("s"):
         pass
 
 
-input(colored('\n\nObrigado por usar FalconYTDownloader3000, pressione qualquer tecla para sair.', "magenta"))
+input(colored('\n\nObrigado por usar FalconYTDownloader, pressione "enter" para sair.', "magenta"))
