@@ -5,12 +5,8 @@ from pytube import YouTube
 from termcolor import colored
 
 os.system('color')
-print(colored("-------------------FALCON YT DOWNLOADER 3000--------------------", "magenta", attrs=['bold']))
-url = input(colored(" > Insira o link do video: ", "cyan"))
-my_video = YouTube(url)
 
-
-# download
+# DOWNLOAD
 def download(video_resolutions, videos):
     while True:
         # Looping through the video_resolutions list to be displayed on the screen for user selection...
@@ -39,7 +35,7 @@ def download(video_resolutions, videos):
             print(colored(":(!!\n\n", "red"))
 
 
-# AUDIO ONLY
+# AUDIO_ONLY
 def sort_audio(url):
     audio_resolutions = []
     audio = []
@@ -75,15 +71,42 @@ def sort_res(url):
 
 
 # Info
-print(colored(" \nINFORMAÇÔES DO VIDEO: ", "yellow"))
-print(colored(" > Titulo: ", "cyan"), my_video.title)
-print(colored(" > Duração: ", "cyan"), my_video.length, "seconds")
-print(colored(" > Views: ", "cyan"), my_video.views, "\n")
+def videoInfo(my_video):
+    print(colored(" \nINFORMAÇÔES DO VIDEO: ", "yellow"))
+    print(colored(" > Titulo: ", "cyan"), my_video.title)
+    print(colored(" > Duração: ", "cyan"), my_video.length, "seconds")
+    print(colored(" > Views: ", "cyan"), my_video.views, "\n")
 
-# Download
-sn = input(colored("Deseja fazer download? (s/n) ", "yellow"))
-if sn.__eq__("s"):
-    print(colored("\nSelecione o tipo de download: ", "yellow"))
+
+# LER E CRIAR TXT
+def txtreader():
+    links = []
+    f = open("links.txt", "x")
+    print(colored("Insira os links no ficheiro txt criado após isso confirme a operação. (1 link por linha)", "yellow"))
+    if input("Continuar? (s/n) ").__eq__("s"):
+        f = open("links.txt", "r")      
+        links = f.readlines()       
+    return links
+
+# TXT
+def txt():
+    links = txtreader();
+    if links == []:
+        print(colored("Ficheiro vazio, operação cancelada...", "red"))
+        os.remove("links.txt")
+        return links
+    else:               
+        return links
+
+
+def downloadF(url):
+    #streams = url.streams.get_audio_only()
+    streams = my_video.streams.filter(only_audio = True, file_extension='mp4').first()
+    streams.download()
+    
+# ESCOLHER TIPO DE FICHEIRO
+def escolhertipo():
+    print(colored("\nSelecione o tipo de ficheiro que deseja baixar: ", "yellow"))
     print(colored("0. Cancelar", "red"))
     print(colored("1. Video + Audio", "cyan"))
     print(colored("2. Video", "cyan"))
@@ -103,6 +126,34 @@ if sn.__eq__("s"):
         download(video_resolutions, videos)
     else:
         pass
-
-
+ 
+   
+# MAIN
+print(colored("-------------------FALCON YT DOWNLOADER 3001--------------------", "magenta", attrs=['bold']))
+print(colored("\nSelecione o tipo de download: ", "yellow"))
+print(colored("0. Cancelar", "red"))
+print(colored("1. Link (1 video)", "cyan"))
+print(colored("2. Ficheiro (1+ videos)", "cyan"))
+choice = input(colored("Opção: ", "yellow"))
+if choice == "1":
+    url = input(colored(" > Insira o link do video: ", "cyan"))
+    my_video = YouTube(url)
+    videoInfo(my_video)
+    sn = input(colored("Deseja fazer download? (s/n) ", "yellow"))
+    if sn.__eq__("s"):
+        escolhertipo()
+    else:
+        pass
+elif choice == "2":
+    url = txt()
+    if  url == []:
+        pass
+    else:
+        for line in url:
+            my_video = YouTube(line)
+            print(colored("A baixar: " + my_video.title, "green"))
+            downloadF(my_video)
+            os.remove("links.txt")
+        print(colored("\nSucesso!", "green"))
+            
 input(colored('\n\nObrigado por usar FalconYTDownloader, pressione "enter" para sair.', "magenta"))
