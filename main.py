@@ -83,7 +83,7 @@ def txtreader():
     links = []
     f = open("links.txt", "x")
     print(colored("Insira os links no ficheiro txt criado após isso confirme a operação. (1 link por linha)", "yellow"))
-    if input("Continuar? (s/n) ").__eq__("s"):
+    if input(colored("Continuar? (s/n) ", "yellow")).__eq__("s"):
         f = open("links.txt", "r")      
         links = f.readlines()       
     return links
@@ -153,7 +153,7 @@ elif choice == "2":
             my_video = YouTube(line)
             print(colored("A baixar: " + my_video.title, "green"))
             downloadF(my_video)
-            os.remove("links.txt")
+        os.remove("links.txt")
         print(colored("\nSucesso!", "green"))
             
 input(colored('\n\nObrigado por usar FalconYTDownloader, pressione "enter" para sair.', "magenta"))
