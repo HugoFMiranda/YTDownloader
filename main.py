@@ -2,9 +2,11 @@
 import os
 
 from pytube import YouTube
+from pytube import Playlist
 from termcolor import colored
 
 os.system('color')
+
 
 # DOWNLOAD
 def download(video_resolutions, videos):
@@ -84,9 +86,10 @@ def txtreader():
     f = open("links.txt", "x")
     print(colored("Insira os links no ficheiro txt criado após isso confirme a operação. (1 link por linha)", "yellow"))
     if input(colored("Continuar? (s/n) ", "yellow")).__eq__("s"):
-        f = open("links.txt", "r")      
-        links = f.readlines()       
+        f = open("links.txt", "r")
+        links = f.readlines()
     return links
+
 
 # TXT
 def txt():
@@ -95,15 +98,16 @@ def txt():
         print(colored("Ficheiro vazio, operação cancelada...", "red"))
         os.remove("links.txt")
         return links
-    else:               
+    else:
         return links
 
 
 def downloadF(url):
-    #streams = url.streams.get_audio_only()
-    streams = my_video.streams.filter(only_audio = True, file_extension='mp4').first()
+    # streams = url.streams.get_audio_only()
+    streams = my_video.streams.filter(only_audio=True, file_extension='mp4').first()
     streams.download()
-    
+
+
 # ESCOLHER TIPO DE FICHEIRO
 def escolhertipo():
     print(colored("\nSelecione o tipo de ficheiro que deseja baixar: ", "yellow"))
@@ -126,14 +130,15 @@ def escolhertipo():
         download(video_resolutions, videos)
     else:
         pass
- 
-   
+
+
 # MAIN
-print(colored("-------------------FALCON YT DOWNLOADER 3001--------------------", "magenta", attrs=['bold']))
+print(colored("-------------------FALCON YT DOWNLOADER 3002--------------------", "magenta", attrs=['bold']))
 print(colored("\nSelecione o tipo de download: ", "yellow"))
 print(colored("0. Cancelar", "red"))
 print(colored("1. Link (1 video)", "cyan"))
 print(colored("2. Ficheiro (1+ videos)", "cyan"))
+print(colored("3. Playlist", "cyan"))
 choice = input(colored("Opção: ", "yellow"))
 if choice == "1":
     url = input(colored(" > Insira o link do video: ", "cyan"))
@@ -146,7 +151,7 @@ if choice == "1":
         pass
 elif choice == "2":
     url = txt()
-    if  url == []:
+    if url == []:
         pass
     else:
         for line in url:
@@ -155,5 +160,12 @@ elif choice == "2":
             downloadF(my_video)
         os.remove("links.txt")
         print(colored("\nSucesso!", "green"))
-            
+elif choice == "3":
+    playlist = Playlist(input(colored(" > Insira o link da playlist: ", "cyan")))
+    for video in playlist.videos:
+        print('A baixar : {} - url : {}'.format(video.title, video.watch_url))
+        my_video = video
+        downloadF(my_video)
+    print(colored("\nSucesso!", "green"))
+
 input(colored('\n\nObrigado por usar FalconYTDownloader, pressione "enter" para sair.', "magenta"))
